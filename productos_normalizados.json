@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Laptop",
+    "cantidad": 25,
+    "precio": 2000
+  },
+  {
+    "id": 2,
+    "nombre": "Cama",
+    "cantidad": 20,
+    "precio": 1500.9
+  },
+  {
+    "id": 3,
+    "nombre": "TV",
+    "cantidad": 14,
+    "precio": 12000.5
+  },
+  {
+    "id": 4,
+    "nombre": "Lavadora",
+    "cantidad": 100,
+    "precio": 11000
+  }
+]
