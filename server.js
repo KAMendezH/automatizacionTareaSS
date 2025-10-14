@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const fs = require('fs'); // <--- Importamos el módulo File System
 const { exec } = require('child_process'); // Módulo para ejecutar comandos del sistema
 const bodyParser = require('body-parser'); // Para leer el JSON que envía React
@@ -11,12 +12,8 @@ const PORT =  process.env.PORT || 3000;
 // 💡 1. Definición de la ruta del archivo normalizado
 const RUTA_NORMALIZADA = path.join(__dirname, 'productos_normalizados.json');
 
-// Middleware para permitir CORS (necesario para el navegador)
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); 
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
+app.use(cors()); 
+app.use(bodyParser.json());
 
 // 2. Ruta de la API para /api/productos
 app.get('/api/productos', (req, res) => {
