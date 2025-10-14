@@ -4,9 +4,11 @@ const fs = require('fs'); // <--- Importamos el módulo File System
 const { exec } = require('child_process'); // Módulo para ejecutar comandos del sistema
 const bodyParser = require('body-parser'); // Para leer el JSON que envía React
 
+
+const app = express();
 app.use(bodyParser.json()); // Habilita Express para leer cuerpos JSON
 const path = require('path');
-const app = express();
+
 const PORT =  process.env.PORT || 3000;
 
 // 💡 1. Definición de la ruta del archivo normalizado
