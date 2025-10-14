@@ -1,5 +1,9 @@
 const express = require('express');
 const fs = require('fs'); // <--- Importamos el módulo File System
+const { exec } = require('child_process'); // Módulo para ejecutar comandos del sistema
+const bodyParser = require('body-parser'); // Para leer el JSON que envía React
+
+app.use(bodyParser.json()); // Habilita Express para leer cuerpos JSON
 const path = require('path');
 const app = express();
 const PORT =  process.env.PORT || 3000;
@@ -48,6 +52,45 @@ app.get('/api/productos', (req, res) => {
         }
     }
 });
+
+app.post('/api/verificar', (req, res) => {
+    // 1. Obtiene la URL enviada por React desde el cuerpo de la petición
+    const urlProyecto = req.body.url; 
+
+    if (!urlProyecto) {
+        return res.status(400).json({ error: "Falta el campo 'url' en la petición." });
+    }
+    
+    console.log(`\n▶️ Solicitud de verificación recibida para URL: ${urlProyecto}`);
+
+    // 2. Comando para ejecutar el script de Python, pasándole la URL como argumento
+    // Necesitas modificar tu script de Python para leer sys.argv[1] (VER NOTA ABAJO)
+    const comando = `python verificar_tabla.py "${urlProyecto}"`;
+
+    // 3. Ejecuta el comando en el sistema operativo
+    exec(comando, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`❌ Error al ejecutar Python: ${stderr}`);
+            return res.status(500).json({ 
+                status: 'error', 
+                mensaje: 'Error en la ejecución del bot de Python.', 
+                detalles: stderr 
+            });
+        }
+        
+        // 4. Envía la salida de la consola de Python (stdout) de vuelta a React
+        console.log('✅ Bot de Python finalizado con éxito.');
+        res.json({
+            status: 'success',
+            mensaje: 'Verificación completada.',
+            resultados_bot: stdout // Contiene los mensajes de ÉXITO/FALLO
+        });
+    });
+});
+
+
+
+
 
 // Iniciar el servidor
 app.listen(PORT, () => {
