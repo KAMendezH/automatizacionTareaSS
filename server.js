@@ -141,7 +141,7 @@ async function extraerYVerificarTabla(url) {
 
 app.post('/api/verificar', async (req, res) => { // ¡Hacer el manejador asíncrono!
     const urlProyecto = req.body.url; 
-
+    console.log("URL recibida: ", urlProyecto);
     if (!urlProyecto) {
         return res.status(400).json({ error: "Falta el campo 'url' en la petición." });
     }
