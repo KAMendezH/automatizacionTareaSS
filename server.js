@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser'); 
 const cors = require('cors'); 
 const path = require('path');
 const fs = require('fs');
@@ -10,7 +9,6 @@ const PORT = process.env.PORT; // Puerto de Render
 
 // Middlewares
 app.use(cors()); 
-app.use(bodyParser.json()); // Middleware para leer cuerpos JSON
 app.use(express.json()); // Middleware moderno de Express
 
 // 💡 Datos esperados y Selector (Declaraciones Globales)
