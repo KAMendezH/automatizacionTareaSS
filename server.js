@@ -15,7 +15,7 @@ const PORT =  process.env.PORT;
 const RUTA_NORMALIZADA = path.join(__dirname, 'productos_normalizados.json');
 
 app.use(cors()); 
-app.use(bodyParser.json());
+app.use(express.json());
 
 // 2. Ruta de la API para /api/productos
 app.get('/api/productos', (req, res) => {
@@ -53,6 +53,7 @@ app.get('/api/productos', (req, res) => {
 });
 
 app.post('/api/verificar', (req, res) => {
+    console.log("Primer petición ejecutada");
 // ... (Tus importaciones) ...
 const puppeteer = require('puppeteer'); // <-- ¡NUEVA IMPORTACIÓN!
 // ...
@@ -140,8 +141,9 @@ async function extraerYVerificarTabla(url) {
 // ----------------------------------------------------------------------
 
 app.post('/api/verificar', async (req, res) => { // ¡Hacer el manejador asíncrono!
+    console.log("Cuerpo de la petición (req.body):", req.body);
     const urlProyecto = req.body.url; 
-    console.log("URL recibida: ", urlProyecto);
+    console.log("URL recibida: ", req.body); // Verificar la URL que le llega
     if (!urlProyecto) {
         return res.status(400).json({ error: "Falta el campo 'url' en la petición." });
     }
