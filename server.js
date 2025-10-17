@@ -135,7 +135,7 @@ async function extraerYVerificarTabla(url) {
 
     return resultados;
 }
-
+});
 // ----------------------------------------------------------------------
 // NUEVO ENDPOINT POST PARA EJECUTAR EL BOT
 // ----------------------------------------------------------------------
@@ -161,7 +161,7 @@ app.post('/api/verificar', async (req, res) => { // ¡Hacer el manejador asíncr
     // Si fue exitoso, devuelve 200 (OK)
     res.json(resultadoVerificacion);
 });
-});
+
 
 
 
