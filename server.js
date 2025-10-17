@@ -7,11 +7,20 @@ const puppeteer = require('puppeteer');
 const app = express();
 const PORT = process.env.PORT; // Puerto de Render
 
-// Middlewares
-app.use(cors()); 
-app.use(express.json()); // Middleware moderno de Express
+// 💡 1. CONFIGURACIÓN CORS (¡DEBE IR PRIMERO!)
 
-// 💡 Datos esperados y Selector (Declaraciones Globales)
+// Solución Forzada para el Preflight Request (OPTIONS)
+app.options('*', cors()); 
+
+// Permite peticiones desde cualquier origen ('*')
+app.use(cors()); 
+
+// 💡 2. MIDDLEWARES PARA LEER EL CUERPO DE LA PETICIÓN
+// Usamos el middleware moderno de Express
+app.use(express.json()); 
+
+
+// 💡 3. Declaraciones Globales (datos esperados, selector)
 const DATOS_ESPERADOS = [
     { Nombre: "Laptop", Cantidad: 15, Precio: 1200.50 },
     { Nombre: "Mouse", Cantidad: 50, Precio: 15.99 },
