@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json()); // Habilita Express para leer cuerpos JSON
 const path = require('path');
 
-const PORT =  process.env.PORT || 3000;
+const PORT =  process.env.PORT;
 
 // 💡 1. Definición de la ruta del archivo normalizado
 const RUTA_NORMALIZADA = path.join(__dirname, 'productos_normalizados.json');
