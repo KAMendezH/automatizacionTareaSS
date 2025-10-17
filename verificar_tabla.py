@@ -112,24 +112,33 @@ def verificar_datos(obtenidos, esperados):
 
 # Modificación en la sección 3. EJECUCIÓN PRINCIPAL
 
+
 if __name__ == "__main__":
-    # Inicializa el WebDriver de Firefox
+    # --- Configuración para Headless Chrome en Render ---
     try:
-        from selenium.webdriver.firefox.service import Service as FirefoxService
-        from webdriver_manager.firefox import GeckoDriverManager
+        from selenium.webdriver.chrome.options import Options
+        from selenium.webdriver.chrome.service import Service as ChromeService
+        from webdriver_manager.chrome import ChromeDriverManager
         
-        # Instala automáticamente el Geckodriver
-        service = FirefoxService(GeckoDriverManager().install())
-        driver = webdriver.Firefox(service=service)
+        # 1. Configuración de Opciones
+        chrome_options = Options()
+        chrome_options.add_argument("--headless") # Modo sin interfaz gráfica
+        chrome_options.add_argument("--no-sandbox") # Necesario en entornos de servidor
+        chrome_options.add_argument("--disable-dev-shm-usage") # Mejora la estabilidad
+        
+        # 2. Inicializa el driver de Chrome
+        service = ChromeService(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.maximize_window()
         
     except Exception as e:
-        print(f"❌ No se pudo inicializar Firefox WebDriver: {e}")
-        print("Asegúrate de tener Firefox instalado.")
+        print(f"❌ No se pudo inicializar Chrome WebDriver en modo Headless: {e}")
+        print("Asegúrate de que tus dependencias de Python y Node.js estén instaladas correctamente.")
         exit()
 
     try:
-        # ... el resto del script sigue igual
+        # ... El resto de tu lógica de extracción de datos (obtener_datos_tabla) sigue aquí ...
+        
         # Obtener los datos del sitio
         datos_reales = obtener_datos_tabla(driver)
         
