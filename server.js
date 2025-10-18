@@ -31,10 +31,10 @@ app.use(express.json());
 // ----------------------------------------------------------------------
 
 const DATOS_ESPERADOS = [
-    { Nombre: "Laptop", Cantidad: 15, Precio: 1200.50 },
-    { Nombre: "Mouse", Cantidad: 50, Precio: 15.99 },
-    { Nombre: "Monitor 27\"", Cantidad: 10, Precio: 350.00 },
-    { Nombre: "Teclado Mecánico", Cantidad: 25, Precio: 75.25 }
+    { nombre: "Laptop", cantidad: 25, precio: 2000},
+    { nombre: "Cama", cantidad: 20, precio: 1500.9 },
+    { nombre: "TV", cantidad: 14, precio: 12000.5 },
+    { nombre: "Lavadora", cantidad: 100, precio: 11000 }
 ];
 const TABLA_SELECTOR = "#tablaProductos tbody";
 const RUTA_NORMALIZADA = path.join(__dirname, 'productos_normalizados.json');
