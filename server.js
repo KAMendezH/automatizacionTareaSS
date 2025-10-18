@@ -1,26 +1,35 @@
-const express = require('express');
-const cors = require('cors'); 
-const path = require('path');
-const fs = require('fs');
-const puppeteer = require('puppeteer'); 
+import express from "express";
+import cors from "cors"; 
+import path from "path";
+import fs from "fs";
+import puppeteer from "puppeteer-core"; // Usamos la versión core
+import chromium from "@sparticuz/chromium"; // Importamos el ejecutable optimizado
+
+// Usamos __dirname, que funciona con modules (ESM) si se importa el módulo 'url'
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT; // Puerto de Render
+const PORT = process.env.PORT || 3000; // Agregamos un fallback por si acaso
 
-// 💡 1. CONFIGURACIÓN CORS (¡DEBE IR PRIMERO!)
+// ----------------------------------------------------------------------
+// MIDDLEWARES Y CONFIGURACIÓN
+// ----------------------------------------------------------------------
 
 // Solución Forzada para el Preflight Request (OPTIONS)
 app.options('*', cors()); 
-
 // Permite peticiones desde cualquier origen ('*')
 app.use(cors()); 
 
-// 💡 2. MIDDLEWARES PARA LEER EL CUERPO DE LA PETICIÓN
-// Usamos el middleware moderno de Express
+// Middleware para leer cuerpos JSON
 app.use(express.json()); 
 
 
-// 💡 3. Declaraciones Globales (datos esperados, selector)
+// ----------------------------------------------------------------------
+// DECLARACIONES GLOBALES
+// ----------------------------------------------------------------------
+
 const DATOS_ESPERADOS = [
     { Nombre: "Laptop", Cantidad: 15, Precio: 1200.50 },
     { Nombre: "Mouse", Cantidad: 50, Precio: 15.99 },
@@ -40,10 +49,12 @@ async function extraerYVerificarTabla(url) {
     let resultados = { status: 'FALLO', mensaje: '', obtenidos: [] };
 
     try {
-        // Inicializa Puppeteer en modo Headless (sin ventana gráfica)
+        // 💡 CAMBIO CRUCIAL PARA RENDER: Inicializa Puppeteer con Chromium optimizado
         browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            executablePath: await chromium.executablePath(), // Le indica a Puppeteer dónde está el ejecutable en Render
+            headless: chromium.headless,                    
+            args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'], // Argumentos de seguridad para entorno de servidor
+            defaultViewport: chromium.defaultViewport,
         });
         const page = await browser.newPage();
         
@@ -121,11 +132,11 @@ app.post('/api/verificar', async (req, res) => {
     // Primer log para asegurar que el cuerpo JSON se está leyendo
     console.log("Cuerpo de la petición (req.body):", req.body);
     
-    const urlProyecto = req.body?.url; // Uso de optional chaining para seguridad
+    // Usamos optional chaining para evitar errores si req.body no tiene 'url'
+    const urlProyecto = req.body?.url; 
     
     if (!urlProyecto) {
-        // Esto se ejecutará si req.body.url no existe o es nulo
-        return res.status(400).json({ error: "Falta el campo 'url' en la petición. Asegúrate de que el frontend envíe { url: '...' }" });
+        return res.status(400).json({ error: "Falta el campo 'url' en la petición." });
     }
     
     console.log(`\n▶️ Solicitud de verificación recibida para URL: ${urlProyecto}`);
