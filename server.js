@@ -76,9 +76,9 @@ async function extraerYVerificarTabla(url) {
                 const precioLimpio = celdas[2].textContent.replace('$', '').replace(',', '');
                 
                 return {
-                    Nombre: celdas[0].textContent,
-                    Cantidad: parseInt(celdas[1].textContent, 10), 
-                    Precio: parseFloat(precioLimpio) 
+                    nombre: celdas[0].textContent,
+                    cantidad: parseInt(celdas[1].textContent, 10), 
+                    precio: parseFloat(precioLimpio) 
                 };
             }).filter(p => p !== null);
             
